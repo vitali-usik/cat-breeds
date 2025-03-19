@@ -1,0 +1,52 @@
+@import "styles/breakpoints";
+
+.root {
+  width: auto;
+  max-width: 100%;
+  padding: 32px;
+  background: antiquewhite;
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+
+.suggestions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.suggestion {
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 0 4px;
+  cursor: pointer;
+  opacity: 0.5;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.results {
+  display: flex;
+  margin: 16px 0;
+  gap: 16px;
+  flex-flow: wrap;
+  font-size: 14px;
+  line-height: 16px;
+}
+
+@media screen and (max-width: $mobile) {
+  .root {
+    min-width: 360px;
+    max-width: 640px;
+    padding: 16px;
+  }
+}
+
+@media screen and (min-width: $mobile) and (max-width: $tablet) {
+  .root {
+    max-width: 1024px;
+  }
+}
