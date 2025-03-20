@@ -9,23 +9,10 @@
   min-height: 100vh;
 }
 
-.suggestions {
+.error {
   display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-  margin: 8px 0;
-}
-
-.suggestion {
-  border: 1px solid black;
-  border-radius: 8px;
-  padding: 0 4px;
-  cursor: pointer;
-  opacity: 0.5;
-
-  &:hover {
-    opacity: 1;
-  }
+  gap: 16px;
+  margin: 8px auto;
 }
 
 .results {

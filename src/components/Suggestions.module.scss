@@ -1,0 +1,23 @@
+.title {
+
+}
+
+.suggestions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+
+.suggestion {
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 0 4px;
+  cursor: pointer;
+  opacity: 0.5;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    opacity: 1;
+  }
+}

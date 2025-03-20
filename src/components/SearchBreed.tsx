@@ -1,8 +1,9 @@
-import React, { ChangeEvent, FC, KeyboardEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, KeyboardEvent, useCallback, useEffect, useState } from "react";
 import styles from "./SearchBreed.module.scss";
 
 const PLACEHOLDER = "Search Breed";
 const KEY_ENTER = "Enter";
+const MIN_SEARCH_LENGTH = 2;
 
 interface SearchBreedProps {
   query: string;
@@ -11,6 +12,7 @@ interface SearchBreedProps {
 
 const SearchBreeds: FC<SearchBreedProps> = ({ query, performSearch }) => {
   const [search, setSearch] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   useEffect(() => {
     if (query) {
@@ -20,15 +22,35 @@ const SearchBreeds: FC<SearchBreedProps> = ({ query, performSearch }) => {
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
+
+    if (search.length >= MIN_SEARCH_LENGTH) {
+      setErrorMessage("");
+    }
   }
 
+  const isValid = useCallback(() => {
+    if (search.length < MIN_SEARCH_LENGTH) {
+      setErrorMessage(`Please enter at least ${MIN_SEARCH_LENGTH} characters`);
+
+      return false;
+    }
+
+    setErrorMessage("");
+
+    return true;
+  }, [search]);
+
   const onSearchClick = () => {
-    performSearch(search);
+    if (isValid()) {
+      performSearch(search);
+    }
   }
 
   const onKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === KEY_ENTER) {
-      performSearch(search);
+      if (isValid()) {
+        performSearch(search);
+      }
     }
   }
 
@@ -49,6 +71,9 @@ const SearchBreeds: FC<SearchBreedProps> = ({ query, performSearch }) => {
           Search
         </button>
       </div>
+      {errorMessage && (
+        <div className={styles.error}>{errorMessage}</div>
+      )}
     </div>
   )
 };
