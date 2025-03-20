@@ -6,14 +6,14 @@ import { Breed } from "./types/types";
 import generateRandomApiError from "./utils/generateRandomApiError";
 import styles from './App.module.scss';
 
-/**
- * TODO
- * add image loading?
- */
+interface Images {
+  [key: string]: string;
+}
 
 function App() {
   const [breeds, setBreeds] = useState<Breed[]>([]);
   const [searchResults, setSearchResults] = useState<Breed[]>([]);
+  const [images, setImages] = useState<Images>({});
   const [isError, setIsError] = useState<boolean>(false);
   const [query, setQuery] = useState<string>("");
   const isLoadingRef = useRef<boolean>(false);
@@ -44,6 +44,30 @@ function App() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const breedIds = searchResults
+      .map(({ id }) => id)
+      .filter((id) => !images[id]);
+
+    const fetchImages = async () => {
+      const requests = breedIds.map(id =>
+        fetch(`https://api.thecatapi.com/v1/images/search?breed_ids=${id}`).then(res => res.json())
+      );
+
+      await Promise.all(requests).then(( results ) => {
+        const imgs: Images = {};
+
+        for (let i = 0; i < breedIds.length; i++) {
+          imgs[breedIds[i]] = results[i][0].url;
+        }
+
+        setImages((prevState) => ({ ...prevState, ...imgs }));
+      });
+    };
+
+    fetchImages();
+  }, [searchResults]);
 
   const onSuggestionClick = (breed: string) => {
     setQuery(breed);
@@ -86,6 +110,7 @@ function App() {
             description={description}
             origin={origin}
             temperament={temperament}
+            image={images[id]}
           />
         ))}
       </div>
